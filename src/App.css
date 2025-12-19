@@ -35,7 +35,7 @@ body { margin: 0; background: var(--bg); color: var(--text); }
 }
 .search input::placeholder { color: var(--hint); }
 
-.chips { display: flex; gap: 12px; margin-top: 14px; }
+.chips { display: flex; gap: 12px; margin-top: 14px; margin-bottom: 14px; }
 .chip {
   flex: 1;
   background: rgba(255,255,255,.06);
@@ -51,10 +51,29 @@ body { margin: 0; background: var(--bg); color: var(--text); }
 
 .hero { margin-top: 14px; border-radius: 18px; overflow: hidden; }
 .hero img { width: 100%; height: 220px; object-fit: cover; display: block; }
+.hero{
+  position: relative;
+}
+
+.heroTitle{
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 12px;
+
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.2;
+
+  /* makes text readable over bright images */
+  text-shadow: 0 6px 18px rgba(0,0,0,0.65);
+}
+
 
 .section { margin-top: 18px; }
 .sectionHeader { display: flex; align-items: center; justify-content: space-between; }
-.sectionTitle { font-size: 13px; letter-spacing: .12em; opacity: .9; }
+.sectionTitle { font-size: 13px; letter-spacing: .12em; opacity: .9; padding: 0.6em 1.2em;}
 .seeAll {
   background: transparent; border: 0; color: var(--link);
   font-size: 14px; cursor: pointer;
@@ -113,3 +132,138 @@ html, body {
 .caption { margin-top: 10px; font-weight: 700; }
 
 .bottomSafe { height: 20px; }
+
+
+/* ===== Movies page (All Movies) ===== */
+
+.moviesPage{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+/* header row like your UI */
+.moviesHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:20px 0;
+}
+.backBtn{
+  background:none;
+  border:none;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+}
+.moviesTitle{
+  color:white;
+  font-size:18px;
+  font-weight:600;
+}
+.moviesHeaderSpacer{ width:40px; }
+
+/* IMPORTANT: use unique class names so your HorizontalRow styles don't collide */
+.moviesGrid{
+  display:grid !important;
+  grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
+  gap:14px !important;
+}
+
+/* Card sizing: prevents "one huge poster" */
+.movieCard{
+  min-width:0 !important;      /* cancels any min-width from horizontal scroller cards */
+  width:100%;
+}
+
+/* Poster sizing: prevents full-screen stretch */
+.moviePoster{
+  width:100% !important;
+  height:auto !important;
+  display:block;
+  border-radius:14px;
+  object-fit:cover;
+}
+
+/* Title */
+.movieName{
+  margin-top:8px;
+  color:white;
+  font-size:12px;
+  line-height:1.2;
+}
+
+/* Pagination (centered like the mock) */
+.paginationBar{
+  margin-top: 18px;
+  padding-bottom: 8px;
+
+  /* Key fix: grid guarantees true center regardless of chevron width */
+  display: grid;
+  grid-template-columns: 44px 1fr 44px; /* equal left & right columns */
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.pageChevron{
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  width: 44px;          /* match the grid column */
+  height: 44px;         /* nice tap target */
+  display: grid;
+  place-items: center;
+}
+
+.pageChevron:disabled{
+  color: rgba(255,255,255,0.35);
+  cursor: default;
+}
+
+/* Pin arrows to the edges of their grid columns */
+.pageChevron:first-child{ justify-self: start; }
+.pageChevron:last-child{ justify-self: end; }
+
+/* Center the pill in the middle column */
+.pagePill{
+  justify-self: center; /* important */
+  background: rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pageBtn{
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  border: none;
+
+  /* KEY: center the number perfectly */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Remove default button spacing that can shift text */
+  padding: 0;
+  line-height: 1;
+
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.pageBtnActive{
+  background: rgba(255,255,255,0.14);
+}
+
+.pageDots{
+  color: rgba(255,255,255,0.7);
+  padding: 0 2px;
+}
