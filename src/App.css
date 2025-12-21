@@ -267,3 +267,123 @@ html, body {
   color: rgba(255,255,255,0.7);
   padding: 0 2px;
 }
+
+/* ===== Movie info page ===== */
+
+.infoPage {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top bar */
+.infoHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+}
+
+.infoTitleTop {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.infoHeaderSpacer {
+  width: 40px;
+}
+
+/* Back button can reuse .backBtn from movies page; if you don't have it, add: */
+.backBtn {
+  background: none;
+  border: none;
+  color: #1e88ff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Poster */
+.infoPosterWrap {
+  margin-top: 4px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.infoPoster {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Title under poster */
+.infoMainTitle {
+  margin-top: 10px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Buttons row ("PLAY" / "Search on web") */
+.infoButtonsRow {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.infoPillBtn {
+  flex: 1;
+  border: none;
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* Card with ABOUT / details */
+.infoCard {
+  margin-top: 16px;
+  padding: 14px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.infoSectionLabel {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* Rows inside card */
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.infoRowLabel {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+}
+
+.infoRowValue {
+  color: #fff;
+  font-size: 13px;
+  text-align: right;
+}
+
+/* Overview text block */
+.infoOverview {
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  line-height: 1.4;
+}
+

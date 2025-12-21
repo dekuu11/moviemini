@@ -4,7 +4,7 @@ import "../App.css";
 const PAGE_SIZE = 6;
 const MAX_PAGE_BUTTONS = 3;
 
-function MoviesPage({ movies = [], onBack }) {
+function MoviesPage({ movies = [], onBack, onMovieClick }) {
   const [page, setPage] = useState(1);
 
   const totalPages = Math.max(1, Math.ceil(movies.length / PAGE_SIZE));
@@ -65,7 +65,11 @@ function MoviesPage({ movies = [], onBack }) {
       {/* Grid */}
       <div className="moviesGrid">
         {pageMovies.map((movie) => (
-          <div key={`${movie.id}-${movie.title}`} className="movieCard">
+          <div 
+            key={`${movie.id}-${movie.title}`} 
+            className="movieCard"
+            onClick={() => onMovieClick && onMovieClick(movie.data, movie.mediaType)}
+          >
             <img src={movie.poster} alt={movie.title} className="moviePoster" />
             <div className="movieName">{movie.title}</div>
           </div>
