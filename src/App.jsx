@@ -201,6 +201,9 @@ export default function App() {
         movies={demoMovies} 
         onBack={() => setView("home")} 
         onMovieClick={(id, type) => openInfo(id, type)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onSearchKeyDown={handleSearch}
       />
     );
   }
@@ -211,6 +214,9 @@ export default function App() {
         movies={demoShows} 
         onBack={() => setView("home")} 
         onMovieClick={(id, type) => openInfo(id, type)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onSearchKeyDown={handleSearch}
       />
     );
   }
@@ -226,6 +232,9 @@ export default function App() {
             setSearchQuery("");
              // Clear search when going back
         }} 
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onSearchKeyDown={handleSearch} 
       />
     );
   }
