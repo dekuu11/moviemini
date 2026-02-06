@@ -29,6 +29,8 @@ export default function App() {
     setView("movieInfo")
   }
 
+  
+
 
   const [searchQuery, setSearchQuery] = useState(""); 
   const [searchResults, setSearchResults] = useState([]);
@@ -241,6 +243,7 @@ export default function App() {
   return (
     <div className="screen">
       <header className="topbar">
+        <div>{}</div>
       </header>
 
       <div className="searchWrap">

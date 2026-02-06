@@ -49,6 +49,9 @@ function Info({ id, type = "movie", onBack }) {       // ✅ props from App
   const genres = (data.genres || []).map((g) => g.name).join(", ");
   const overview = data.overview || "No overview available.";
 
+  
+
+
   return (
     <div className="screen infoPage">
       {/* Header */}
