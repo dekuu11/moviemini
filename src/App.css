@@ -267,3 +267,178 @@ html, body {
   color: rgba(255,255,255,0.7);
   padding: 0 2px;
 }
+
+/* ===== Movie info page ===== */
+
+.infoPage {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+  min-height: 0; /* Allows flex child to shrink and scroll */
+}
+
+/* Top bar */
+.infoHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  position: relative;
+}
+
+.infoTitleWrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.infoTitleTop {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.infoSubtitle {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.infoMoreBtn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(90deg);
+  letter-spacing: 2px;
+}
+
+/* Back button */
+.infoHeader .backBtn {
+  background: none;
+  border: none;
+  color: #1e88ff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Poster */
+.infoPosterWrap {
+  margin-top: 4px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.infoPoster {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Title under poster */
+.infoMainTitle {
+  margin-top: 16px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Buttons row ("PLAY" / "Search on web") */
+.infoButtonsRow {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.infoPillBtn {
+  flex: 1;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.infoBtnIcon {
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Card with ABOUT / details */
+.infoCard {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.infoSectionLabel {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* Rows inside card */
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 12px;
+}
+
+.infoRowLabel {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.infoRowValue {
+  color: #fff;
+  font-size: 14px;
+  text-align: right;
+  flex: 1;
+  margin-left: 16px;
+}
+
+/* Synopsis section */
+.infoSynopsisSection {
+  margin-top: 12px;
+}
+
+.infoSynopsisLabel {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+/* Overview text block */
+.infoOverview {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  line-height: 1.5;
+}
+

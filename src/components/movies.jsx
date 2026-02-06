@@ -4,7 +4,7 @@ import "../App.css";
 const PAGE_SIZE = 6;
 const MAX_PAGE_BUTTONS = 3;
 
-function MoviesPage({ movies = [], onBack }) {
+function MoviesPage({ movies = [], onBack, onMovieClick, searchQuery, onSearchChange, onSearchKeyDown}) {
   const [page, setPage] = useState(1);
 
   const totalPages = Math.max(1, Math.ceil(movies.length / PAGE_SIZE));
@@ -32,7 +32,7 @@ function MoviesPage({ movies = [], onBack }) {
   return (
     <div className="screen moviesPage">
       {/* Header */}
-      {/*<div className="moviesHeader">
+      <div className="moviesHeader">
         <button className="backBtn" onClick={onBack}>
           ❮ Back
         </button>
@@ -40,12 +40,17 @@ function MoviesPage({ movies = [], onBack }) {
         <div className="moviesTitle">All Movies</div>
 
         <div className="moviesHeaderSpacer" />
-      </div> */}
+      </div>
 
       <div className="searchWrap">
         <div className="search">
           <span className="icon">⌕</span>
-          <input placeholder="Search movies..." />
+          <input 
+            placeholder="Search movies..."
+            value={searchQuery}
+            onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+            onKeyDown={onSearchKeyDown}
+          />
         </div>
       </div>
 
@@ -65,7 +70,11 @@ function MoviesPage({ movies = [], onBack }) {
       {/* Grid */}
       <div className="moviesGrid">
         {pageMovies.map((movie) => (
-          <div key={`${movie.id}-${movie.title}`} className="movieCard">
+          <div 
+            key={`${movie.data ?? movie.id}-${movie.title}`}  
+            className="movieCard"
+            onClick={() => onMovieClick && onMovieClick(movie.data, movie.mediaType)}
+          >
             <img src={movie.poster} alt={movie.title} className="moviePoster" />
             <div className="movieName">{movie.title}</div>
           </div>
