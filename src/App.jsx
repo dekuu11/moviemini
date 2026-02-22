@@ -5,8 +5,7 @@ import Login from "./components/login";
 import Info from "./components/info";
 import AccountPage from "./components/AccountPage";
 import "./App.css";
-//const API_BASE = 'http://localhost:3000/api';
-const API_BASE = 'http://192.168.0.4:3000/api';
+const API_BASE = import.meta.env.VITE_API_URL;
 
 const popular = [
   "movie",
