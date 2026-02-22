@@ -1,9 +1,9 @@
 // app.ts
 import express from 'express';
 import cors from 'cors';
-import moviesRouter from './routes/movies.js';
-import favoritesRouter from './routes/favorites.js';
-import authRouter from './routes/auth.js';
+import moviesRouter from './routes/movies';
+import favoritesRouter from './routes/favorites';
+import authRouter from './routes/auth';
 
 
 
