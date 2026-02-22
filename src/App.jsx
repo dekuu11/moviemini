@@ -3,7 +3,8 @@ import HorizontalRow from "./components/HorizontalRow";
 import MovieDetails from './components/movies';
 import Info from "./components/info";  
 import "./App.css";
-const TMDB_BEARER = import.meta.env.VITE_API_KEY;
+//const API_BASE = 'http://localhost:3000/api';
+const API_BASE = 'http://192.168.0.4:3000/api';
 
 const popular = [
   "movie",
@@ -41,15 +42,8 @@ export default function App() {
 
   function movies_load(types) {
     for (const type of types) {
-      const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${TMDB_BEARER}`
-      }
-    };
 
-    fetch(`https://api.themoviedb.org/3/${type}/popular?language=en-US&page=1`, options)
+    fetch(`${API_BASE}/${type === 'movie' ? 'movies' : 'tv'}/popular`)
       .then(res => res.json())
       .then(res => {
         const trending_mv = res.results;
@@ -80,16 +74,8 @@ export default function App() {
   }
 
    function hero_load() {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${TMDB_BEARER}`,
-      },
-    };
 
-    // You can switch to movie/day or tv/day if you want. [web:98]
-    fetch("https://api.themoviedb.org/3/trending/all/day?language=en-US", options)
+    fetch(`${API_BASE}/trending`)
       .then((res) => res.json())
       .then((res) => {
         const results = Array.isArray(res?.results) ? res.results : [];
@@ -119,18 +105,10 @@ export default function App() {
   const handleSearch = async (e) => {
     // Only search if user presses Enter and box is not empty
     if (e.key === 'Enter' && searchQuery.trim().length > 0) {
-      
-      const options = {
-        method: 'GET',
-        headers: {
-           accept: 'application/json',
-           Authorization: `Bearer ${TMDB_BEARER}`
-        }
-      };
 
       try {
         // We use 'multi' to search for both movies and tv shows
-        const response = await fetch(`https://api.themoviedb.org/3/search/multi?query=${searchQuery}&include_adult=false&language=en-US&page=1`, options);
+        const response = await fetch(`${API_BASE}/search?q=${searchQuery}`);
         const data = await response.json();
         
         // Format the data exactly like your other movies

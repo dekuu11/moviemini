@@ -2,25 +2,18 @@
 import { useEffect, useState } from "react";
 import "../App.css";
 
-const TMDB_BEARER = import.meta.env.VITE_API_KEY; // ✅ uses same key as App
+//const API_BASE = 'http://localhost:3000/api';
+const API_BASE = 'http://192.168.0.4:3000/api';
 
-function Info({ id, type = "movie", onBack }) {       // ✅ props from App
+function Info({ id, type = "movie", onBack }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
   useEffect(() => {
     if (!id) return;
 
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${TMDB_BEARER}`,
-      },
-    };
-
     // /movie/{id} or /tv/{id}
-    fetch(`https://api.themoviedb.org/3/${type}/${id}?language=en-US`, options) // [web:147]
+    fetch(`${API_BASE}/${type}/${id}`)
       .then((res) => res.json())
       .then((json) => {
         setData(json);
