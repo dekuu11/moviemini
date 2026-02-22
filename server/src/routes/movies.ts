@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/movies/popular', async (req, res) => {
     try {
-        const page = req.query.page || '1';
+        const page = (req.query.page as string) || '1';
         const movies = await tmdb.popularMovies(page);
         res.json(movies);
     } catch (error) {
