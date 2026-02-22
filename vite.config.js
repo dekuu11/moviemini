@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    // This allows any ngrok or tunnel URL to work
+    host: true,  // allows access from network
     allowedHosts: true,
   },
 })

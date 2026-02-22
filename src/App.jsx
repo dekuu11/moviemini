@@ -1,27 +1,38 @@
 import { useEffect, useState, useMemo } from "react"; 
 import HorizontalRow from "./components/HorizontalRow";
 import MovieDetails from './components/movies';
-import Info from "./components/info";  
+import Login from "./components/login";
+import Info from "./components/info";
+import AccountPage from "./components/AccountPage";
 import "./App.css";
-const TMDB_BEARER = import.meta.env.VITE_API_KEY;
+const API_BASE = import.meta.env.VITE_API_URL;
 
 const popular = [
   "movie",
   "tv" 
 ]
 
-const series = [];
 
 const TMDB_IMG_BASE = "https://image.tmdb.org/t/p/";
-const HERO_SIZE = "w1280"; // can be w780, w1280, original etc. [web:78]
+const HERO_SIZE = "w1280"; 
 
 export default function App() {
   const [view, setView] = useState("home");
   const [demoMovies, setDemoMovies] = useState([]);
   const [demoShows, setDemoShows] = useState([]);
-
   const [selectedId, setSelectedId] = useState(null);
   const [selectedType, setSelectedType] = useState("movie");
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchResults, setSearchResults] = useState([]);
+  const [heroItems, setHeroItems] = useState([]); 
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  // If not logged in, show login page
+  
 
   const openInfo = (id, type) => {
     setSelectedId(id);
@@ -31,25 +42,10 @@ export default function App() {
 
   
 
-
-  const [searchQuery, setSearchQuery] = useState(""); 
-  const [searchResults, setSearchResults] = useState([]);
-
-  
-  const [heroItems, setHeroItems] = useState([]); // [{ backdropUrl, title }]
-  const [heroIndex, setHeroIndex] = useState(0);
-
   function movies_load(types) {
     for (const type of types) {
-      const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${TMDB_BEARER}`
-      }
-    };
 
-    fetch(`https://api.themoviedb.org/3/${type}/popular?language=en-US&page=1`, options)
+    fetch(`${API_BASE}/${type === 'movie' ? 'movies' : 'tv'}/popular`)
       .then(res => res.json())
       .then(res => {
         const trending_mv = res.results;
@@ -80,21 +76,12 @@ export default function App() {
   }
 
    function hero_load() {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${TMDB_BEARER}`,
-      },
-    };
 
-    // You can switch to movie/day or tv/day if you want. [web:98]
-    fetch("https://api.themoviedb.org/3/trending/all/day?language=en-US", options)
+    fetch(`${API_BASE}/trending`)
       .then((res) => res.json())
       .then((res) => {
         const results = Array.isArray(res?.results) ? res.results : [];
 
-        // Keep only items with a backdrop_path, build full URLs. [web:78]
         const items = results
           .filter((x) => x?.backdrop_path)
           .map((x) => {
@@ -119,18 +106,10 @@ export default function App() {
   const handleSearch = async (e) => {
     // Only search if user presses Enter and box is not empty
     if (e.key === 'Enter' && searchQuery.trim().length > 0) {
-      
-      const options = {
-        method: 'GET',
-        headers: {
-           accept: 'application/json',
-           Authorization: `Bearer ${TMDB_BEARER}`
-        }
-      };
 
       try {
         // We use 'multi' to search for both movies and tv shows
-        const response = await fetch(`https://api.themoviedb.org/3/search/multi?query=${searchQuery}&include_adult=false&language=en-US&page=1`, options);
+        const response = await fetch(`${API_BASE}/search?q=${searchQuery}`);
         const data = await response.json();
         
         // Format the data exactly like your other movies
@@ -145,7 +124,7 @@ export default function App() {
           }));
 
         setSearchResults(formattedResults);
-        setView("search"); // Switch the view to show results
+        setView("search"); 
       } catch (error) {
         console.error("Search failed:", error);
       }
@@ -155,13 +134,14 @@ export default function App() {
 
 
   useEffect(() => {
+    if (!user) return;
     const tg = window?.Telegram?.WebApp;
     movies_load(popular);
     hero_load(); 
     if (!tg) return;
     tg.ready();      // Telegram WebApp API
     tg.expand?.();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (heroItems.length < 2) return;
@@ -185,13 +165,19 @@ export default function App() {
     };
   }, [heroItems, heroIndex]);
 
-
+  if (!user) {
+    return <Login onLogin={(userData) => {
+      localStorage.setItem("user", JSON.stringify(userData));
+      setUser(userData);
+    }} />;
+  }
 
   if (view === "movieInfo" && selectedId) {
     return (
       <Info
         id={selectedId}
         type={selectedType}
+        user={user}
         onBack={() => setView("home")}
       />
     );
@@ -232,7 +218,6 @@ export default function App() {
         onBack={() => {
             setView("home"); 
             setSearchQuery("");
-             // Clear search when going back
         }} 
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
@@ -240,10 +225,27 @@ export default function App() {
       />
     );
   }
+
+  // Account page with favorites and logout
+  if (view === "account") {
+    return (
+      <AccountPage 
+        user={user}
+        onBack={() => setView("home")}
+        onLogout={() => {
+          localStorage.removeItem("user");
+          setUser(null);
+        }}
+        onMovieClick={(id, type) => openInfo(id, type)}
+      />
+    );
+  }
+
   return (
     <div className="screen">
       <header className="topbar">
-        <div>{}</div>
+        <span className="appTitle">MovieMini</span>
+        <button className="accountBtn" onClick={() => setView("account")}>👤</button>
       </header>
 
       <div className="searchWrap">
@@ -259,11 +261,11 @@ export default function App() {
       </div>
 
       <div className="chips">
-        <button className="chip chipActive">
-          <span className="chipIcon">▦</span> Movies
+        <button className="chip" onClick={() => setView("movies")}>
+          Movies
         </button>
-        <button className="chip">
-          <span className="chipIcon">🌐</span> TV Shows
+        <button className="chip" onClick={() => setView("tvshows")}>
+          TV Shows
         </button>
       </div>
 
@@ -274,7 +276,6 @@ export default function App() {
 
 
       <section className="section">
-        <div className="sectionTitle "> TRENDING</div>
         <div className="sectionHeader">
           <div className="sectionTitle">MOVIES</div>
           <button className="seeAll" onClick={() => setView("movies")}>
@@ -282,8 +283,9 @@ export default function App() {
           </button>
         </div>
         <HorizontalRow 
-        items={demoMovies}
-        onItemClick={(item) => openInfo(item.data, item.mediaType)} />
+          items={demoMovies}
+          onItemClick={(item) => openInfo(item.data, item.mediaType)} 
+        />
       </section>
 
       <section className="section">
@@ -294,8 +296,9 @@ export default function App() {
           </button>
         </div>
         <HorizontalRow 
-        items={demoShows} 
-        onItemClick={(item) => openInfo(item.data, item.mediaType)} />
+          items={demoShows} 
+          onItemClick={(item) => openInfo(item.data, item.mediaType)} 
+        />
       </section>
 
       <div className="bottomSafe" />
