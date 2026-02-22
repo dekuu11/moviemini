@@ -11,10 +11,8 @@ const popular = [
   "tv" 
 ]
 
-const series = [];
-
 const TMDB_IMG_BASE = "https://image.tmdb.org/t/p/";
-const HERO_SIZE = "w1280"; // can be w780, w1280, original etc. [web:78]
+const HERO_SIZE = "w1280"; 
 
 export default function App() {
   const [view, setView] = useState("home");
@@ -30,14 +28,10 @@ export default function App() {
     setView("movieInfo")
   }
 
-  
-
-
   const [searchQuery, setSearchQuery] = useState(""); 
   const [searchResults, setSearchResults] = useState([]);
-
   
-  const [heroItems, setHeroItems] = useState([]); // [{ backdropUrl, title }]
+  const [heroItems, setHeroItems] = useState([]); 
   const [heroIndex, setHeroIndex] = useState(0);
 
   function movies_load(types) {
@@ -80,7 +74,6 @@ export default function App() {
       .then((res) => {
         const results = Array.isArray(res?.results) ? res.results : [];
 
-        // Keep only items with a backdrop_path, build full URLs. [web:78]
         const items = results
           .filter((x) => x?.backdrop_path)
           .map((x) => {
@@ -123,7 +116,7 @@ export default function App() {
           }));
 
         setSearchResults(formattedResults);
-        setView("search"); // Switch the view to show results
+        setView("search"); 
       } catch (error) {
         console.error("Search failed:", error);
       }
@@ -210,7 +203,6 @@ export default function App() {
         onBack={() => {
             setView("home"); 
             setSearchQuery("");
-             // Clear search when going back
         }} 
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
@@ -221,7 +213,6 @@ export default function App() {
   return (
     <div className="screen">
       <header className="topbar">
-        <div>{}</div>
       </header>
 
       <div className="searchWrap">

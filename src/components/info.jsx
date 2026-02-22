@@ -29,9 +29,9 @@ function Info({ id, type = "movie", onBack }) {
   if (loading || !data) return <div className="screen">Loading…</div>;
 
   const poster = data.backdrop_path
-    ? `https://image.tmdb.org/t/p/w780${data.backdrop_path}`  // [web:78]
+    ? `https://image.tmdb.org/t/p/w780${data.backdrop_path}`  
     : data.poster_path
-    ? `https://image.tmdb.org/t/p/w500${data.poster_path}`    // [web:78]
+    ? `https://image.tmdb.org/t/p/w500${data.poster_path}`    
     : "";
 
   const label = type === "tv" ? "TV Show" : "Movie";
@@ -41,9 +41,6 @@ function Info({ id, type = "movie", onBack }) {
   const rating = data.vote_average ? data.vote_average.toFixed(1) : "-";
   const genres = (data.genres || []).map((g) => g.name).join(", ");
   const overview = data.overview || "No overview available.";
-
-  
-
 
   return (
     <div className="screen infoPage">
@@ -90,7 +87,7 @@ function Info({ id, type = "movie", onBack }) {
         <div className="infoRow">
           <div className="infoRowLabel">Director, Writer</div>
           <div className="infoRowValue">
-            {/* TMDB gives credits from a different endpoint; for now just show the name field if present. [web:81] */}
+
             {data.tagline || "—"}
           </div>
         </div>
