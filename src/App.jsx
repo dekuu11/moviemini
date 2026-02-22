@@ -1,7 +1,9 @@
 import { useEffect, useState, useMemo } from "react"; 
 import HorizontalRow from "./components/HorizontalRow";
 import MovieDetails from './components/movies';
-import Info from "./components/info";  
+import Login from "./components/login";
+import Info from "./components/info";
+import AccountPage from "./components/AccountPage";
 import "./App.css";
 //const API_BASE = 'http://localhost:3000/api';
 const API_BASE = 'http://192.168.0.4:3000/api';
@@ -11,6 +13,7 @@ const popular = [
   "tv" 
 ]
 
+
 const TMDB_IMG_BASE = "https://image.tmdb.org/t/p/";
 const HERO_SIZE = "w1280"; 
 
@@ -18,9 +21,19 @@ export default function App() {
   const [view, setView] = useState("home");
   const [demoMovies, setDemoMovies] = useState([]);
   const [demoShows, setDemoShows] = useState([]);
-
   const [selectedId, setSelectedId] = useState(null);
   const [selectedType, setSelectedType] = useState("movie");
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchResults, setSearchResults] = useState([]);
+  const [heroItems, setHeroItems] = useState([]); 
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  // If not logged in, show login page
+  
 
   const openInfo = (id, type) => {
     setSelectedId(id);
@@ -28,11 +41,7 @@ export default function App() {
     setView("movieInfo")
   }
 
-  const [searchQuery, setSearchQuery] = useState(""); 
-  const [searchResults, setSearchResults] = useState([]);
   
-  const [heroItems, setHeroItems] = useState([]); 
-  const [heroIndex, setHeroIndex] = useState(0);
 
   function movies_load(types) {
     for (const type of types) {
@@ -126,13 +135,14 @@ export default function App() {
 
 
   useEffect(() => {
+    if (!user) return;
     const tg = window?.Telegram?.WebApp;
     movies_load(popular);
     hero_load(); 
     if (!tg) return;
     tg.ready();      // Telegram WebApp API
     tg.expand?.();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (heroItems.length < 2) return;
@@ -156,13 +166,19 @@ export default function App() {
     };
   }, [heroItems, heroIndex]);
 
-
+  if (!user) {
+    return <Login onLogin={(userData) => {
+      localStorage.setItem("user", JSON.stringify(userData));
+      setUser(userData);
+    }} />;
+  }
 
   if (view === "movieInfo" && selectedId) {
     return (
       <Info
         id={selectedId}
         type={selectedType}
+        user={user}
         onBack={() => setView("home")}
       />
     );
@@ -210,9 +226,27 @@ export default function App() {
       />
     );
   }
+
+  // Account page with favorites and logout
+  if (view === "account") {
+    return (
+      <AccountPage 
+        user={user}
+        onBack={() => setView("home")}
+        onLogout={() => {
+          localStorage.removeItem("user");
+          setUser(null);
+        }}
+        onMovieClick={(id, type) => openInfo(id, type)}
+      />
+    );
+  }
+
   return (
     <div className="screen">
       <header className="topbar">
+        <span className="appTitle">MovieMini</span>
+        <button className="accountBtn" onClick={() => setView("account")}>👤</button>
       </header>
 
       <div className="searchWrap">
@@ -228,11 +262,11 @@ export default function App() {
       </div>
 
       <div className="chips">
-        <button className="chip chipActive">
-          <span className="chipIcon">▦</span> Movies
+        <button className="chip" onClick={() => setView("movies")}>
+          Movies
         </button>
-        <button className="chip">
-          <span className="chipIcon">🌐</span> TV Shows
+        <button className="chip" onClick={() => setView("tvshows")}>
+          TV Shows
         </button>
       </div>
 
@@ -243,7 +277,6 @@ export default function App() {
 
 
       <section className="section">
-        <div className="sectionTitle "> TRENDING</div>
         <div className="sectionHeader">
           <div className="sectionTitle">MOVIES</div>
           <button className="seeAll" onClick={() => setView("movies")}>
@@ -251,8 +284,9 @@ export default function App() {
           </button>
         </div>
         <HorizontalRow 
-        items={demoMovies}
-        onItemClick={(item) => openInfo(item.data, item.mediaType)} />
+          items={demoMovies}
+          onItemClick={(item) => openInfo(item.data, item.mediaType)} 
+        />
       </section>
 
       <section className="section">
@@ -263,8 +297,9 @@ export default function App() {
           </button>
         </div>
         <HorizontalRow 
-        items={demoShows} 
-        onItemClick={(item) => openInfo(item.data, item.mediaType)} />
+          items={demoShows} 
+          onItemClick={(item) => openInfo(item.data, item.mediaType)} 
+        />
       </section>
 
       <div className="bottomSafe" />
