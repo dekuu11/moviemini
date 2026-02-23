@@ -1,11 +1,12 @@
 import { useEffect, useState, useMemo } from "react"; 
 import HorizontalRow from "./components/HorizontalRow";
 import MovieDetails from './components/movies';
-import Login from "./components/login";
 import Info from "./components/info";
 import AccountPage from "./components/AccountPage";
 import "./App.css";
 const API_BASE = import.meta.env.VITE_API_URL;
+
+const DEMO_USER = { id: 1, username: "demo" };
 
 const popular = [
   "movie",
@@ -22,10 +23,7 @@ export default function App() {
   const [demoShows, setDemoShows] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [selectedType, setSelectedType] = useState("movie");
-  const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem("user");
-    return saved ? JSON.parse(saved) : null;
-  });
+  const [user, setUser] = useState(DEMO_USER);
   const [searchQuery, setSearchQuery] = useState(""); 
   const [searchResults, setSearchResults] = useState([]);
   const [heroItems, setHeroItems] = useState([]); 
@@ -165,13 +163,6 @@ export default function App() {
     };
   }, [heroItems, heroIndex]);
 
-  if (!user) {
-    return <Login onLogin={(userData) => {
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
-    }} />;
-  }
-
   if (view === "movieInfo" && selectedId) {
     return (
       <Info
@@ -233,8 +224,8 @@ export default function App() {
         user={user}
         onBack={() => setView("home")}
         onLogout={() => {
-          localStorage.removeItem("user");
-          setUser(null);
+          setView("home");
+          setUser(DEMO_USER);
         }}
         onMovieClick={(id, type) => openInfo(id, type)}
       />
